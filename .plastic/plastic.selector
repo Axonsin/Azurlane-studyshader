@@ -1,0 +1,4 @@
+repository "BLHX_Room@tj_axon_0721@cloud.cn"
+  path "/"
+    br "/main"
+    co "/main"
