@@ -28,6 +28,10 @@ Shader "Custom/CartoonFaceShader"
         _FaceForward ("Face Forward Vector", Vector) = (0, 0, 1, 0)
         _FaceUp ("Face Up Vector", Vector) = (0, 1, 0, 0)
         
+        [Header(Face Shadow Blending)]
+        _SdfShadowDominance("SDF阴影主导度", Range(0, 1)) = 0.7
+        _RealTimeShadowOffset("实时阴影偏移", Range(0, 1)) = 0.3
+        
         [Header(Outline)]
         _OutlineWidth ("Outline Width", Range(0, 0.5)) = 0.02
         _OutlineColor ("Outline Color", Color) = (0.5, 0.5, 0.5, 1)
@@ -111,6 +115,8 @@ Shader "Custom/CartoonFaceShader"
                 float _FaceShadowStrength;
                 float4 _FaceForward;
                 float4 _FaceUp;
+                float _SdfShadowDominance;
+                float _RealTimeShadowOffset;
                 // PBR参数
                 float _LambertIntensity;
                 float _NPRBlend;
@@ -281,7 +287,17 @@ Shader "Custom/CartoonFaceShader"
                 
                 // 原始NPR光照
                 float faceShadowFactor = CalculateFaceAverageShadow(input.positionWS, normalWS);
-                float combinedShadow = softShadow * lerp(1.0, faceShadowFactor, _FaceShadowStrength);
+                float sdfShadow = softShadow;//将面部SDF和外部的实时阴影分开处理
+                float realTimeShadow = faceShadowFactor;
+                float sdfDominance = _SdfShadowDominance;
+                float rtOffset = _RealTimeShadowOffset;
+                //float combinedShadow = softShadow * lerp(1.0, faceShadowFactor, _FaceShadowStrength);
+                //float combinedShadow = min(sdfShadow + (1.0 - _FaceShadowStrength), realTimeShadow + _FaceShadowThreshold);
+                float combinedShadow = lerp(
+                    min(sdfShadow, realTimeShadow + rtOffset), // 实时阴影会减弱SDF阴影
+                    sdfShadow, // 纯SDF阴影
+                    sdfDominance // 控制两者混合程度
+                );
 
                 half3 ambientLight = _Compensationcolor.rgb; // 使用补偿色调整环境光
                 // half3 directNPRLighting = baseColor.rgb * mainLight.color * combinedShadow;
