@@ -138,7 +138,7 @@ Material:
     - _DirShadowEnable: 1
     - _DirShadowRemap: 0.1
     - _DirShadowStrength: 1
-    - _DisableScreenSpaceRim: 0.097
+    - _DisableScreenSpaceRim: 0.016
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
@@ -177,7 +177,7 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _ActualEmissionTint: {r: 0, g: 0, b: 0, a: 0}
+    - _ActualEmissionTint: {r: 0.509434, g: 0.509434, b: 0.509434, a: 0}
     - _ActualRimLightTint: {r: 1, g: 1, b: 1, a: 1}
     - _ActualSpecularTint: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}

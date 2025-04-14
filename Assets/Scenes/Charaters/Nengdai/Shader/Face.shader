@@ -39,10 +39,19 @@ Shader "Custom/CartoonFaceShader"
         _OutlineMask ("Outline Mask (黑色区域不显示描边)", 2D) = "white" {}
         
         [Header(PBR Settings)]
-        _LambertIntensity ("Lambert Lighting Intensity", Range(0, 1)) = 0.5
+        _LambertIntensity ("Lambert Lighting Intensity/目前已弃用，更换为SSS", Range(0, 1)) = 0.5
         _NPRBlend ("NPR 与 PBR 混合程度", Range(0, 1)) = 0.7
         [Toggle(_ADDITIONAL_LIGHTS)] _AdditionalLights ("Enable Additional Lights", Float) = 1
         _AdditionalLightsIntensity ("Additional Lights Intensity", Range(0, 1)) = 0.5
+        
+        [Header(SSS Settings)]
+        _SSSColor ("次表面散射颜色", Color) = (1.0, 0.4, 0.4, 1.0)
+        _SSSScale ("次表面散射强度", Range(0, 10)) = 1.0
+        _SSSPower ("次表面散射衰减", Range(0.1, 10)) = 2.0
+        _SSSDistortion ("散射法线扭曲", Range(0, 1)) = 0.5
+        _SSSAmbient ("环境散射强度", Range(0, 2)) = 0.2
+        _ThicknessMap ("厚度贴图(G通道)", 2D) = "white" {}
+        _ThicknessMapPower ("厚度影响强度", Range(0, 2)) = 1.0
     }
     
     SubShader
@@ -94,6 +103,8 @@ Shader "Custom/CartoonFaceShader"
             SAMPLER(sampler_BumpMap);
             TEXTURE2D(_FaceShadingGradeMap);
             SAMPLER(sampler_FaceShadingGradeMap);
+            TEXTURE2D(_ThicknessMap);
+            SAMPLER(sampler_ThicknessMap);
             
             CBUFFER_START(UnityPerMaterial)
                 float4 _BaseMap_ST;
@@ -121,6 +132,14 @@ Shader "Custom/CartoonFaceShader"
                 float _LambertIntensity;
                 float _NPRBlend;
                 float _AdditionalLightsIntensity;
+                // SSS参数
+                half4 _SSSColor;
+                float _SSSScale;
+                float _SSSPower;
+                float _SSSDistortion;
+                float _SSSAmbient;
+                float4 _ThicknessMap_ST;
+                float _ThicknessMapPower;
                 // 轮廓参数
                 float _OutlineWidth;
                 float4 _OutlineColor;
@@ -160,6 +179,35 @@ Shader "Custom/CartoonFaceShader"
             {
                 float NdotL = max(0, dot(normal, lightDir));
                 return lightColor * NdotL * attenuation;
+            }
+
+            //SSS
+            half3 CalculateSSS(float3 normalWS, float3 viewDirWS, float3 lightDirWS, half3 lightColor, 
+                  half attenuation, half3 baseColor, float thickness)
+            {
+                // 1. 基础漫反射项
+                float NdotL = max(0, dot(normalWS, lightDirWS));
+                
+                // 2. 次表面散射项
+                // 使用扭曲的光线方向模拟皮肤内部散射
+                float3 H = normalize(viewDirWS + normalWS * _SSSDistortion);
+                float VdotH = pow(saturate(dot(viewDirWS, -H)), _SSSPower) * _SSSScale;
+                
+                // 使用厚度值调整散射强度
+                float scatterFactor = VdotH * thickness;
+                
+                // 3. 组合直接光与散射光
+                half3 directDiffuse = baseColor * NdotL;
+                half3 scattering = _SSSColor.rgb * scatterFactor;
+                
+                // 最终组合
+                half3 result = (directDiffuse + scattering) * lightColor * attenuation;
+                
+                // 添加环境散射
+                half3 ambientScattering = baseColor * _SSSColor.rgb * _SSSAmbient * thickness;
+                result += ambientScattering;
+                
+                return result;
             }
             
             float CalculateFaceAverageShadow(float3 positionWS, float3 normalWS)
@@ -306,8 +354,11 @@ Shader "Custom/CartoonFaceShader"
                 half3 nprColor = max(directNPRLighting, ambientLighting);
                 
                 // 计算Lambert漫反射
-                half3 lambertColor = baseColor.rgb * CalculateLambert(N, mainLight.direction, mainLight.color, mainLightAttenuation) * _LambertIntensity;
-                
+                // half3 lambertColor = baseColor.rgb * CalculateLambert(N, mainLight.direction, mainLight.color, mainLightAttenuation) * _LambertIntensity;
+                half thickness = pow(SAMPLE_TEXTURE2D(_ThicknessMap, sampler_ThicknessMap, input.uv).g, _ThicknessMapPower);
+                half3 sssColor = CalculateSSS(N, normalize(input.viewDirWS), mainLight.direction, 
+                             mainLight.color, mainLightAttenuation, 
+                             baseColor.rgb, thickness);
                 // 添加额外光源的贡献 (Additional Lights)
                 half3 additionalLightsColor = half3(0, 0, 0);
                 
@@ -325,7 +376,7 @@ Shader "Custom/CartoonFaceShader"
                 #endif
                 
                 // 混合NPR和PBR光照
-                half3 finalColor = lerp(nprColor, lambertColor + additionalLightsColor + ambientLighting, 1 - _NPRBlend);
+                half3 finalColor = lerp(nprColor, sssColor + additionalLightsColor + ambientLighting, 1 - _NPRBlend);
                 
                 // 应用面部渐变
                 finalColor = lerp(finalColor, _FaceGradientColor.rgb, _FaceGradient * 0.5);
