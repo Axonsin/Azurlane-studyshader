@@ -6,7 +6,9 @@ ShaderImporter:
   - _BaseMap: {instanceID: 0}
   - _BumpMap: {instanceID: 0}
   - _FaceShadingGradeMap: {instanceID: 0}
+  - _AddTexture: {instanceID: 0}
   - _OutlineMask: {instanceID: 0}
+  - _ThicknessMap: {instanceID: 0}
   nonModifiableTextures: []
   userData: 
   assetBundleName: 

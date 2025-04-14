@@ -24,7 +24,8 @@ Material:
   m_Shader: {fileID: 4800000, guid: 7d9bd29916c466740b9f96a05af65621, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _ADDITIONAL_LIGHTS
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -36,6 +37,14 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _AddLipTexture:
+        m_Texture: {fileID: 2800000, guid: 4ce1e3de43cbe0840bed7161e996ff56, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _AddTexture:
+        m_Texture: {fileID: 2800000, guid: a4e396b25f03dfa4cac752b0cded81a8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 2800000, guid: 4da6fd2e16d70c44fbe8c931454c8295, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -130,8 +139,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AdditionalLights: 0
-    - _AdditionalLightsIntensity: 0
+    - _AdditionalLights: 1
+    - _AdditionalLightsIntensity: 0.594
     - _AdditiveLightIntensity: 1
     - _AlphaClip: 0
     - _AlphaToMask: 0
@@ -152,11 +161,11 @@ Material:
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
-    - _FaceGradient: 0.746
+    - _FaceGradient: 0.693
     - _FaceGradientOffset: 1
     - _FaceGradientPow: 0.1
     - _FaceShadingOffset: -0.03
-    - _FaceShadingSoftness: 0.0721
+    - _FaceShadingSoftness: 0.0895
     - _FaceShadowSampleCount: 5
     - _FaceShadowSmoothness: 0.263
     - _FaceShadowStrength: 0.791
@@ -167,7 +176,7 @@ Material:
     - _LambertIntensity: 0
     - _Metallic: 0
     - _MirrorU: 0
-    - _NPRBlend: 0.394
+    - _NPRBlend: 0.604
     - _OcclusionStrength: 1
     - _OutlineWidth: 0.114
     - _OutlineZOffset: 0
@@ -178,11 +187,11 @@ Material:
     - _RimlightFeather: 0.1
     - _RimlightThreshold: 0.5
     - _SSSAmbient: 2
-    - _SSSDistortion: 0.884
-    - _SSSPower: 8.19
-    - _SSSScale: 7.99
+    - _SSSDistortion: 0.704
+    - _SSSPower: 6.6
+    - _SSSScale: 5.91
     - _ScreenSpaceRimShadowEnable: 0
-    - _SdfShadowDominance: 0.762
+    - _SdfShadowDominance: 0.745
     - _SelfShadowEnable: 1
     - _ShadingOffsetRemap: 0.1
     - _ShadingOffsetStrength: 0.5
@@ -210,15 +219,15 @@ Material:
     - _ActualEmissionTint: {r: 0, g: 0, b: 0, a: 0}
     - _ActualRimLightTint: {r: 1, g: 1, b: 1, a: 1}
     - _ActualSpecularTint: {r: 1, g: 1, b: 1, a: 1}
-    - _BaseColor: {r: 0.84400004, g: 0.7467482, b: 0.67942005, a: 1}
+    - _BaseColor: {r: 0.8627451, g: 0.7368652, b: 0.6876079, a: 1}
     - _CharacterForward: {r: 0, g: 0, b: 1, a: 0}
     - _CharacterUp: {r: 0, g: 1, b: 0, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Compensationcolor: {r: 0.922, g: 0.922, b: 0.922, a: 1}
+    - _Compensationcolor: {r: 0.58, g: 0.58, b: 0.58, a: 1}
     - _DirShadowTint: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FaceCenterUvAndExtend: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
-    - _FaceForward: {r: -0.016883416, g: 0, b: 0.9998575, a: 0}
+    - _FaceForward: {r: -0.0050164624, g: 0, b: 0.9999874, a: 0}
     - _FaceGradientColor: {r: 0.8301887, g: 0.73881567, b: 0.73881567, a: 1}
     - _FaceLocalHeightBound: {r: 1, g: 0, b: 1, a: 0}
     - _FaceUp: {r: 0, g: 1, b: 0, a: 0}

@@ -7,6 +7,7 @@ Shader "Custom/CartoonFaceShader"
         _BumpMap ("Normal Map", 2D) = "bump" {}
         _FaceShadingGradeMap ("Face Shadow Map", 2D) = "white" {}
         _Compensationcolor("最弱环境光阴影补偿色",Color) = (1,1,1,1)
+        _AddLipTexture("Add LipTexture", 2D) = "white" {}
         
         [Header(Face Settings)]
         _FaceShadingOffset ("Face Shading Offset", Range(-1, 1)) = 0
@@ -105,6 +106,8 @@ Shader "Custom/CartoonFaceShader"
             SAMPLER(sampler_FaceShadingGradeMap);
             TEXTURE2D(_ThicknessMap);
             SAMPLER(sampler_ThicknessMap);
+            TEXTURE2D(_AddLipTexture);
+            SAMPLER(sampler_AddLipTexture);
             
             CBUFFER_START(UnityPerMaterial)
                 float4 _BaseMap_ST;
@@ -377,10 +380,9 @@ Shader "Custom/CartoonFaceShader"
                 
                 // 混合NPR和PBR光照
                 half3 finalColor = lerp(nprColor, sssColor + additionalLightsColor + ambientLighting, 1 - _NPRBlend);
-                
+                half3 AddLipMap = SAMPLE_TEXTURE2D(_AddLipTexture, sampler_AddLipTexture, input.uv);
                 // 应用面部渐变
-                finalColor = lerp(finalColor, _FaceGradientColor.rgb, _FaceGradient * 0.5);
-                
+                finalColor = lerp(finalColor, _FaceGradientColor.rgb, _FaceGradient * 0.5)*AddLipMap;
                 return half4(finalColor, baseColor.a);
             }
             ENDHLSL
