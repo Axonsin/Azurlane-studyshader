@@ -210,7 +210,7 @@ Material:
     - _ActualEmissionTint: {r: 0, g: 0, b: 0, a: 0}
     - _ActualRimLightTint: {r: 1, g: 1, b: 1, a: 1}
     - _ActualSpecularTint: {r: 1, g: 1, b: 1, a: 1}
-    - _BaseColor: {r: 0.72156864, g: 0.67058825, b: 0.63529414, a: 1}
+    - _BaseColor: {r: 0.84400004, g: 0.7467482, b: 0.67942005, a: 1}
     - _CharacterForward: {r: 0, g: 0, b: 1, a: 0}
     - _CharacterUp: {r: 0, g: 1, b: 0, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
@@ -218,7 +218,7 @@ Material:
     - _DirShadowTint: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FaceCenterUvAndExtend: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
-    - _FaceForward: {r: 0.5089884, g: 0, b: 0.8607734, a: 0}
+    - _FaceForward: {r: -0.016883416, g: 0, b: 0.9998575, a: 0}
     - _FaceGradientColor: {r: 0.8301887, g: 0.73881567, b: 0.73881567, a: 1}
     - _FaceLocalHeightBound: {r: 1, g: 0, b: 1, a: 0}
     - _FaceUp: {r: 0, g: 1, b: 0, a: 0}
