@@ -24,6 +24,10 @@ Shader "Custom/CartoonFaceShader"
         _FaceShadowSmoothness ("Face Shadow Smoothness", Range(0, 0.5)) = 0.2
         _FaceShadowStrength ("Face Shadow Strength", Range(0, 1)) = 0.8
         
+        [Header(Face Dynamic Tracking)]
+        _FaceForward ("Face Forward Vector", Vector) = (0, 0, 1, 0)
+        _FaceUp ("Face Up Vector", Vector) = (0, 1, 0, 0)
+        
         [Header(Outline)]
         _OutlineWidth ("Outline Width", Range(0, 0.5)) = 0.02
         _OutlineColor ("Outline Color", Color) = (0.5, 0.5, 0.5, 1)
@@ -105,6 +109,8 @@ Shader "Custom/CartoonFaceShader"
                 float _FaceShadowThreshold;
                 float _FaceShadowSmoothness;
                 float _FaceShadowStrength;
+                float4 _FaceForward;
+                float4 _FaceUp;
                 // PBR参数
                 float _LambertIntensity;
                 float _NPRBlend;
@@ -216,6 +222,8 @@ Shader "Custom/CartoonFaceShader"
                 
                 
                 // Character orientation vectors
+                _CharacterForward = _FaceForward;
+                _CharacterUp = _FaceUp;
                 float3 Front = normalize(_CharacterForward.xyz);
                 float3 UP = normalize(_CharacterUp.xyz);
                 float3 Left = normalize(cross(UP, Front));
