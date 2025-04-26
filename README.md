@@ -26,4 +26,4 @@
 
 ## Demo
 
-![Image_1744651565030](F:\Unity Projects\BLHX_Room\Image_1744651565030.png)
+![Image_1744651565030](Image_1744651565030.png)
